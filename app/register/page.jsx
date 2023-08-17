@@ -14,7 +14,27 @@ const RegisterPage = () => {
     const router = useRouter();
 
     const handleSubmit = async (e) => {
+        e.preventDefault()
 
+        if(!isLoaded) {
+            return;
+        }
+        try {
+            await signUp.create({
+                first_name: firstName,
+                last_name: lastName,
+                email_address: email,
+                password
+            })
+
+            //Send email
+            await signUp.prepareEmailAddressVerification({strategy: 'email_code'});
+
+            //Change UI
+            setPendingVerification(true)
+        } catch (error) {
+            
+        }
     }
 
     const onPressVerify = async (e) => {
@@ -119,8 +139,6 @@ const RegisterPage = () => {
               </button>
             </form>
           </div>
-        )}
-      </div>
         )}
     </div>
   )
